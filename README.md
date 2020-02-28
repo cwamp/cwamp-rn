@@ -1,8 +1,27 @@
 # Cwamp for React Native
 
+## Install
 
 ```npm
-yarn react-native run-ios
+yarn install
 
-yarn react-native run-android
+# npm install
+```
+
+## Run
+
+#### For iOS
+
+```npm
+yarn ios
+
+# npm run ios
+```
+
+#### For Android
+
+```npm
+yarn android
+
+# npm run android
 ```
