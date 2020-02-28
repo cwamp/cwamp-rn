@@ -55,7 +55,6 @@ class App extends React.Component {
         console.warn('自定义按钮点击：' + response.customButton);
       } else {
         // let source = {uri: response.uri};
-        // You can also display the image using data:
         // let source = {uri: 'data:image/jpeg;base64,' + response.data};
         this.setState({
           avatarUrl: `${response.uri}`,
@@ -87,11 +86,13 @@ class App extends React.Component {
     const image = !avatarUrl ? (
       <View>
         <TouchableWithoutFeedback onPress={this.choosePic}>
-          <Image
-            resizeMode="contain"
-            source={{uri: 'https://cdn.cwamp.cn/images/add.png'}}
-            style={styles.defaultImage}
-          />
+          <View style={styles.defaultImageWrapper}>
+            <Image
+              resizeMode="contain"
+              source={require('../assets/images/add.png')}
+              style={styles.defaultImage}
+            />
+          </View>
         </TouchableWithoutFeedback>
         <Text style={styles.warning}>
           声明: 本应用不会上传任何信息到服务器, 所有操作均在本地完成.
@@ -145,14 +146,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F3F3',
   },
   body: {
+    flex: 1,
     backgroundColor: 'white',
   },
-  defaultImage: {
-    width: 200,
-    height: 200,
+  defaultImageWrapper: {
+    width: 160,
+    height: 160,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 32,
     marginBottom: 24,
-    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: '#999',
+    borderRadius: 4,
+  },
+  defaultImage: {
+    width: 80,
+    height: 80,
   },
   warning: {
     color: 'red',
