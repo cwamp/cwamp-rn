@@ -1,7 +1,13 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {View, Text} from 'react-native';
+import {
+  DynamicStyleSheet,
+  DynamicValue,
+  useDynamicStyleSheet,
+} from 'react-native-dark-mode';
 
 function Panel() {
+  const styles = useDynamicStyleSheet(dynamicStyleSheet);
   return (
     <>
       <View style={styles.sectionContainer}>
@@ -15,7 +21,7 @@ function Panel() {
   );
 }
 
-const styles = StyleSheet.create({
+const dynamicStyleSheet = new DynamicStyleSheet({
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
@@ -23,13 +29,13 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 24,
     fontWeight: '600',
-    color: 'black',
+    color: new DynamicValue('black', 'white'),
   },
   sectionDescription: {
     marginTop: 8,
     fontSize: 18,
     fontWeight: '400',
-    color: '#444',
+    color: new DynamicValue('#444', '#f2f2f2'),
   },
   highlight: {
     fontWeight: '700',

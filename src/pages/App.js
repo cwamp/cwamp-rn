@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
   SafeAreaView,
-  StyleSheet,
   ScrollView,
   TouchableWithoutFeedback,
   TouchableOpacity,
@@ -11,6 +10,13 @@ import {
   StatusBar,
 } from 'react-native';
 
+import {
+  DarkModeProvider,
+  DynamicStyleSheet,
+  DynamicValue,
+  useDynamicStyleSheet,
+  useDynamicValue,
+} from 'react-native-dark-mode';
 import ImagePicker from 'react-native-image-picker';
 import Modal from 'react-native-modal';
 import Canvas from 'react-native-canvas';
@@ -31,7 +37,13 @@ const options = {
   },
 };
 
+const lightLogo = require('../assets/images/add.png');
+const darkLogo = require('../assets/images/add_dark.png');
+const logoUri = new DynamicValue(lightLogo, darkLogo);
+
 function App() {
+  const styles = useDynamicStyleSheet(dynamicStyleSheet);
+  const source = useDynamicValue(logoUri);
   const [avatarUrl, setAvatarUrl] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -77,7 +89,7 @@ function App() {
         <View style={styles.defaultImageWrapper}>
           <Image
             resizeMode="contain"
-            source={require('../assets/images/add.png')}
+            source={source}
             style={styles.defaultImage}
           />
         </View>
@@ -93,7 +105,7 @@ function App() {
   );
 
   return (
-    <>
+    <DarkModeProvider>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <ScrollView
@@ -121,17 +133,17 @@ function App() {
           </View>
         </ScrollView>
       </SafeAreaView>
-    </>
+    </DarkModeProvider>
   );
 }
 
-const styles = StyleSheet.create({
+const dynamicStyleSheet = new DynamicStyleSheet({
   scrollView: {
     backgroundColor: '#F3F3F3',
   },
   body: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: new DynamicValue('white', 'black'),
   },
   defaultImageWrapper: {
     width: 160,
