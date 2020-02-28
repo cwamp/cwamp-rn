@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.cwamprn",
+    package = "cn.cwamp.apps.rn",
 )
 
 android_resource(
     name = "res",
-    package = "com.cwamprn",
+    package = "cn.cwamp.apps.rn",
     res = "src/main/res",
 )
 

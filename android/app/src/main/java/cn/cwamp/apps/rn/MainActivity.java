@@ -1,4 +1,4 @@
-package com.cwamprn;
+package cn.cwamp.apps.rn;
 
 import com.facebook.react.ReactActivity;
 
