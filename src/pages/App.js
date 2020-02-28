@@ -1,0 +1,201 @@
+import React from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  View,
+  Text,
+  Image,
+  StatusBar,
+} from 'react-native';
+
+import ImagePicker from 'react-native-image-picker';
+import Modal from 'react-native-modal';
+import Canvas from 'react-native-canvas';
+
+import Panel from '../components/Panel';
+
+import loadImage from '../utils/image';
+
+//图片选择器参数设置
+const options = {
+  title: '请选择图片来源',
+  cancelButtonTitle: '取消',
+  takePhotoButtonTitle: '拍照',
+  chooseFromLibraryButtonTitle: '相册图片',
+  storageOptions: {
+    skipBackup: true,
+    path: 'images',
+  },
+};
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      avatarUrl: null,
+      isModalVisible: false,
+    };
+  }
+
+  toggleModal = func => {
+    this.setState({isModalVisible: !this.state.isModalVisible});
+    func && typeof func === 'function' && func();
+  };
+
+  choosePic = () => {
+    ImagePicker.showImagePicker(options, response => {
+      if (response.didCancel) {
+        console.log('用户取消了选择！');
+      } else if (response.error) {
+        console.error('ImagePicker发生错误：' + response.error);
+      } else if (response.customButton) {
+        console.warn('自定义按钮点击：' + response.customButton);
+      } else {
+        // let source = {uri: response.uri};
+        // You can also display the image using data:
+        // let source = {uri: 'data:image/jpeg;base64,' + response.data};
+        this.setState({
+          avatarUrl: `${response.uri}`,
+        });
+      }
+    });
+  };
+
+  clearImage = () => {
+    this.setState({
+      avatarUrl: null,
+    });
+  };
+
+  handleCanvas = async canvas => {
+    const {avatarUrl} = this.state;
+    canvas.width = 200;
+    canvas.height = 200;
+    const ctx = canvas.getContext('2d');
+    loadImage(canvas, avatarUrl)
+      .then(image => {
+        ctx.drawImage(image, 0, 0, 200, 200);
+      })
+      .catch(console.error);
+  };
+
+  render() {
+    const {avatarUrl} = this.state;
+    const image = !avatarUrl ? (
+      <View>
+        <TouchableWithoutFeedback onPress={this.choosePic}>
+          <Image
+            resizeMode="contain"
+            source={{uri: 'https://cdn.cwamp.cn/images/add.png'}}
+            style={styles.defaultImage}
+          />
+        </TouchableWithoutFeedback>
+        <Text style={styles.warning}>
+          声明: 本应用不会上传任何信息到服务器, 所有操作均在本地完成.
+        </Text>
+      </View>
+    ) : (
+      <TouchableOpacity onPress={this.choosePic} onLongPress={this.toggleModal}>
+        <Canvas style={styles.canvas} ref={this.handleCanvas} />
+      </TouchableOpacity>
+    );
+
+    return (
+      <>
+        <StatusBar barStyle="dark-content" />
+        <SafeAreaView>
+          <ScrollView
+            contentInsetAdjustmentBehavior="automatic"
+            style={styles.scrollView}>
+            <View style={styles.body}>
+              {image}
+              <Panel />
+            </View>
+            <View>
+              <Modal isVisible={this.state.isModalVisible}>
+                <View style={styles.modalView}>
+                  <Text style={styles.modalViewTitle}>确认框</Text>
+                  <Text style={styles.modalViewDescription}>
+                    确定清除图片吗?
+                  </Text>
+                  <View style={styles.modalViewBtnWrapper}>
+                    <TouchableOpacity onPress={this.toggleModal}>
+                      <Text style={styles.modalViewBtnText}>取 消</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => this.toggleModal(this.clearImage)}>
+                      <Text style={styles.modalViewBtnText}>确 定</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </Modal>
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      </>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  scrollView: {
+    backgroundColor: '#F3F3F3',
+  },
+  body: {
+    backgroundColor: 'white',
+  },
+  defaultImage: {
+    width: 200,
+    height: 200,
+    marginTop: 32,
+    marginBottom: 24,
+    alignSelf: 'center',
+  },
+  warning: {
+    color: 'red',
+    marginLeft: 24,
+    marginRight: 24,
+    textAlign: 'center',
+  },
+  canvas: {
+    height: 200,
+    width: 200,
+    marginTop: 32,
+    marginBottom: 24,
+    alignSelf: 'center',
+  },
+  modalView: {
+    backgroundColor: 'white',
+    height: 160,
+    paddingLeft: 24,
+    paddingRight: 24,
+    paddingTop: 20,
+    paddingBottom: 20,
+    borderRadius: 5,
+  },
+  modalViewTitle: {
+    fontSize: 20,
+    marginBottom: 14,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  modalViewDescription: {
+    fontSize: 16,
+    marginBottom: 14,
+    textAlign: 'center',
+  },
+  modalViewBtnWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
+  },
+  modalViewBtnText: {
+    fontSize: 20,
+    backgroundColor: 'yellow',
+  },
+});
+
+export default App;
