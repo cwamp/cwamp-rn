@@ -1,20 +1,18 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 
-class Panel extends React.Component {
-  render() {
-    return (
-      <>
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Panel</Text>
-          <Text style={styles.sectionDescription}>
-            Edit <Text style={styles.highlight}>Panel</Text> to change this
-            screen and then come back to see your edits.
-          </Text>
-        </View>
-      </>
-    );
-  }
+function Panel() {
+  return (
+    <>
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Panel</Text>
+        <Text style={styles.sectionDescription}>
+          Edit <Text style={styles.highlight}>Panel</Text> to change this screen
+          and then come back to see your edits.
+        </Text>
+      </View>
+    </>
+  );
 }
 
 const styles = StyleSheet.create({

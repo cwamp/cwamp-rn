@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -31,21 +31,16 @@ const options = {
   },
 };
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      avatarUrl: null,
-      isModalVisible: false,
-    };
+function App() {
+  const [avatarUrl, setAvatarUrl] = useState('');
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  function toggleModal(func) {
+    setModalVisible(!isModalVisible);
+    func && typeof func === 'function' && func();
   }
 
-  toggleModal = func => {
-    this.setState({isModalVisible: !this.state.isModalVisible});
-    func && typeof func === 'function' && func();
-  };
-
-  choosePic = () => {
+  function choosePic() {
     ImagePicker.showImagePicker(options, response => {
       if (response.didCancel) {
         console.log('用户取消了选择！');
@@ -56,21 +51,16 @@ class App extends React.Component {
       } else {
         // let source = {uri: response.uri};
         // let source = {uri: 'data:image/jpeg;base64,' + response.data};
-        this.setState({
-          avatarUrl: `${response.uri}`,
-        });
+        setAvatarUrl(`${response.uri}`);
       }
     });
-  };
+  }
 
-  clearImage = () => {
-    this.setState({
-      avatarUrl: null,
-    });
-  };
+  function clearImage() {
+    setAvatarUrl('');
+  }
 
-  handleCanvas = async canvas => {
-    const {avatarUrl} = this.state;
+  async function handleCanvas(canvas) {
     canvas.width = 200;
     canvas.height = 200;
     const ctx = canvas.getContext('2d');
@@ -79,66 +69,60 @@ class App extends React.Component {
         ctx.drawImage(image, 0, 0, 200, 200);
       })
       .catch(console.error);
-  };
-
-  render() {
-    const {avatarUrl} = this.state;
-    const image = !avatarUrl ? (
-      <View>
-        <TouchableWithoutFeedback onPress={this.choosePic}>
-          <View style={styles.defaultImageWrapper}>
-            <Image
-              resizeMode="contain"
-              source={require('../assets/images/add.png')}
-              style={styles.defaultImage}
-            />
-          </View>
-        </TouchableWithoutFeedback>
-        <Text style={styles.warning}>
-          声明: 本应用不会上传任何信息到服务器, 所有操作均在本地完成.
-        </Text>
-      </View>
-    ) : (
-      <TouchableOpacity onPress={this.choosePic} onLongPress={this.toggleModal}>
-        <Canvas style={styles.canvas} ref={this.handleCanvas} />
-      </TouchableOpacity>
-    );
-
-    return (
-      <>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView>
-          <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            style={styles.scrollView}>
-            <View style={styles.body}>
-              {image}
-              <Panel />
-            </View>
-            <View>
-              <Modal isVisible={this.state.isModalVisible}>
-                <View style={styles.modalView}>
-                  <Text style={styles.modalViewTitle}>确认框</Text>
-                  <Text style={styles.modalViewDescription}>
-                    确定清除图片吗?
-                  </Text>
-                  <View style={styles.modalViewBtnWrapper}>
-                    <TouchableOpacity onPress={this.toggleModal}>
-                      <Text style={styles.modalViewBtnText}>取 消</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => this.toggleModal(this.clearImage)}>
-                      <Text style={styles.modalViewBtnText}>确 定</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </Modal>
-            </View>
-          </ScrollView>
-        </SafeAreaView>
-      </>
-    );
   }
+
+  const image = !avatarUrl ? (
+    <View>
+      <TouchableWithoutFeedback onPress={choosePic}>
+        <View style={styles.defaultImageWrapper}>
+          <Image
+            resizeMode="contain"
+            source={require('../assets/images/add.png')}
+            style={styles.defaultImage}
+          />
+        </View>
+      </TouchableWithoutFeedback>
+      <Text style={styles.warning}>
+        声明: 本应用不会上传任何信息到服务器, 所有操作均在本地完成.
+      </Text>
+    </View>
+  ) : (
+    <TouchableOpacity onPress={choosePic} onLongPress={toggleModal}>
+      <Canvas style={styles.canvas} ref={handleCanvas} />
+    </TouchableOpacity>
+  );
+
+  return (
+    <>
+      <StatusBar barStyle="dark-content" />
+      <SafeAreaView>
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          style={styles.scrollView}>
+          <View style={styles.body}>
+            {image}
+            <Panel />
+          </View>
+          <View>
+            <Modal isVisible={isModalVisible}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalViewTitle}>确认框</Text>
+                <Text style={styles.modalViewDescription}>确定清除图片吗?</Text>
+                <View style={styles.modalViewBtnWrapper}>
+                  <TouchableOpacity onPress={toggleModal}>
+                    <Text style={styles.modalViewBtnText}>取 消</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => toggleModal(clearImage)}>
+                    <Text style={styles.modalViewBtnText}>确 定</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
