@@ -7,12 +7,10 @@ import {
   View,
   Text,
   Image,
-  StatusBar,
 } from 'react-native';
 
 import {
   DarkModeProvider,
-  DynamicStyleSheet,
   DynamicValue,
   useDynamicStyleSheet,
   useDynamicValue,
@@ -21,9 +19,12 @@ import ImagePicker from 'react-native-image-picker';
 import Modal from 'react-native-modal';
 import Canvas from 'react-native-canvas';
 
-import Panel from '../components/Panel';
+import GeneralStatusBarColor from '../../components/GeneralStatusBarColor';
+import Panel from '../../components/Panel';
 
-import loadImage from '../utils/image';
+import dynamicStyleSheet from './styles';
+
+import loadImage from '../../utils/image';
 
 //图片选择器参数设置
 const options = {
@@ -37,22 +38,26 @@ const options = {
   },
 };
 
-const lightLogo = require('../assets/images/add.png');
-const darkLogo = require('../assets/images/add_dark.png');
+const lightLogo = require('../../assets/images/add.png');
+const darkLogo = require('../../assets/images/add_dark.png');
 const logoUri = new DynamicValue(lightLogo, darkLogo);
+const barStyle = new DynamicValue('dark-content', 'light-content');
+const barBGStyle = new DynamicValue('white', 'black');
 
 function App() {
   const styles = useDynamicStyleSheet(dynamicStyleSheet);
   const source = useDynamicValue(logoUri);
+  const barSource = useDynamicValue(barStyle);
+  const barBGSource = useDynamicValue(barBGStyle);
   const [avatarUrl, setAvatarUrl] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
 
-  function toggleModal(func) {
+  const toggleModal = func => {
     setModalVisible(!isModalVisible);
     func && typeof func === 'function' && func();
-  }
+  };
 
-  function choosePic() {
+  const choosePic = () => {
     ImagePicker.showImagePicker(options, response => {
       if (response.didCancel) {
         console.log('用户取消了选择！');
@@ -66,13 +71,13 @@ function App() {
         setAvatarUrl(`${response.uri}`);
       }
     });
-  }
+  };
 
-  function clearImage() {
+  const clearImage = () => {
     setAvatarUrl('');
-  }
+  };
 
-  async function handleCanvas(canvas) {
+  const handleCanvas = async canvas => {
     canvas.width = 200;
     canvas.height = 200;
     const ctx = canvas.getContext('2d');
@@ -81,7 +86,7 @@ function App() {
         ctx.drawImage(image, 0, 0, 200, 200);
       })
       .catch(console.error);
-  }
+  };
 
   const image = !avatarUrl ? (
     <View>
@@ -106,8 +111,12 @@ function App() {
 
   return (
     <DarkModeProvider>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
+      <GeneralStatusBarColor
+        translucent
+        backgroundColor={barBGSource}
+        barStyle={barSource}
+      />
+      <SafeAreaView style={styles.container}>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
@@ -136,73 +145,5 @@ function App() {
     </DarkModeProvider>
   );
 }
-
-const dynamicStyleSheet = new DynamicStyleSheet({
-  scrollView: {
-    backgroundColor: '#F3F3F3',
-  },
-  body: {
-    flex: 1,
-    backgroundColor: new DynamicValue('white', 'black'),
-  },
-  defaultImageWrapper: {
-    width: 160,
-    height: 160,
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 32,
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: '#999',
-    borderRadius: 4,
-  },
-  defaultImage: {
-    width: 80,
-    height: 80,
-  },
-  warning: {
-    color: 'red',
-    marginLeft: 24,
-    marginRight: 24,
-    textAlign: 'center',
-  },
-  canvas: {
-    height: 200,
-    width: 200,
-    marginTop: 32,
-    marginBottom: 24,
-    alignSelf: 'center',
-  },
-  modalView: {
-    backgroundColor: 'white',
-    height: 160,
-    paddingLeft: 24,
-    paddingRight: 24,
-    paddingTop: 20,
-    paddingBottom: 20,
-    borderRadius: 5,
-  },
-  modalViewTitle: {
-    fontSize: 20,
-    marginBottom: 14,
-    fontWeight: '700',
-    textAlign: 'center',
-  },
-  modalViewDescription: {
-    fontSize: 16,
-    marginBottom: 14,
-    textAlign: 'center',
-  },
-  modalViewBtnWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 20,
-  },
-  modalViewBtnText: {
-    fontSize: 20,
-    backgroundColor: 'yellow',
-  },
-});
 
 export default App;
