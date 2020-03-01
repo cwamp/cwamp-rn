@@ -124,7 +124,7 @@ function App() {
   );
 
   return (
-    <DarkModeProvider mode={currentMode}>
+    <DarkModeProvider>
       <GeneralStatusBarColor
         translucent
         backgroundColor={barBGSource}
@@ -155,15 +155,15 @@ function App() {
             </Modal>
           </View>
         </ScrollView>
-        <TouchableOpacity onPress={switchMode}>
-          <View style={styles.modeViewWrapper}>
+        <View style={styles.modeViewWrapper}>
+          <TouchableOpacity onPress={switchMode}>
             <Image
               resizeMode="contain"
               source={modeSource}
               style={styles.modeImage}
             />
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
     </DarkModeProvider>
   );

@@ -22,7 +22,7 @@ const dynamicStyleSheet = new DynamicStyleSheet({
     paddingBottom: 20,
     marginHorizontal: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: new DynamicValue('#f0f0f0', '#555'),
   },
   defaultImageWrapper: {
     width: 160,
@@ -32,7 +32,7 @@ const dynamicStyleSheet = new DynamicStyleSheet({
     justifyContent: 'center',
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#999',
+    borderColor: new DynamicValue('#999', '#555'),
     borderRadius: BORDER_RADIUS_NORMAL,
   },
   defaultImage: {
