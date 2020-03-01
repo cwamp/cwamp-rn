@@ -4,12 +4,11 @@ import {View, Text, TextInput, Switch} from 'react-native';
 import Button from 'apsl-react-native-button';
 import Slider from '@react-native-community/slider';
 import RNPickerSelect from 'react-native-picker-select';
-import {useDarkMode, useDynamicStyleSheet} from 'react-native-dark-mode';
+import {useDynamicStyleSheet} from 'react-native-dark-mode';
 
 import dynamicStyleSheet from './styles';
 
 function Panel() {
-  const isDarkMode = useDarkMode();
   const styles = useDynamicStyleSheet(dynamicStyleSheet);
 
   const toggleSwitch = value => {
@@ -34,7 +33,7 @@ function Panel() {
             autoCorrect={false}
             autoFocus={true}
             placeholder="本证件仅供XX业务使用, 其他用途无效"
-            placeholderTextColor={isDarkMode ? '#999' : '#f2f2f2'}
+            placeholderTextColor="#999"
             multiline
             numberOfLines={2}
             maxLength={40}

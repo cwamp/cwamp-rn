@@ -38,7 +38,7 @@ const dynamicStyleSheet = new DynamicStyleSheet({
   },
   btnPreviewStyle: {
     borderColor: '#999',
-    backgroundColor: '#f2f2f2',
+    backgroundColor: new DynamicValue('white', '#999'),
   },
   btnSaveStyle: {
     borderColor: '#2980b9',
