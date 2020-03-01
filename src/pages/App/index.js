@@ -103,7 +103,7 @@ function App() {
   };
 
   const image = !avatarUrl ? (
-    <View>
+    <>
       <TouchableWithoutFeedback onPress={choosePic}>
         <View style={styles.defaultImageWrapper}>
           <Image
@@ -116,7 +116,7 @@ function App() {
       <Text style={styles.warning}>
         声明: 本应用不会上传任何信息到服务器, 所有操作均在本地完成.
       </Text>
-    </View>
+    </>
   ) : (
     <TouchableOpacity onPress={choosePic} onLongPress={toggleModal}>
       <Canvas style={styles.canvas} ref={handleCanvas} />
@@ -135,7 +135,7 @@ function App() {
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
           <View style={styles.body}>
-            {image}
+            <View style={styles.header}>{image}</View>
             <Panel />
           </View>
           <View>

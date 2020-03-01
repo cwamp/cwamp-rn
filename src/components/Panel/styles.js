@@ -1,23 +1,47 @@
 import {DynamicStyleSheet, DynamicValue} from 'react-native-dark-mode';
 
+import {FONT_SIZE_SMALL, BORDER_RADIUS_NORMAL} from '../../constants';
+
 const dynamicStyleSheet = new DynamicStyleSheet({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  itemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+    marginHorizontal: 10,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  itemTitle: {
+    width: 70,
+    fontSize: FONT_SIZE_SMALL,
+    marginRight: 14,
+    textAlign: 'right',
     color: new DynamicValue('black', 'white'),
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: new DynamicValue('#444', '#f2f2f2'),
+  itemWrapper: {
+    flex: 1,
   },
-  highlight: {
-    fontWeight: '700',
+  textInput: {
+    height: 54,
+    fontSize: FONT_SIZE_SMALL,
+    borderWidth: 1,
+    borderColor: '#999',
+    borderRadius: BORDER_RADIUS_NORMAL,
+    paddingHorizontal: 4,
+  },
+  itemContent: {
+    height: 25,
+  },
+  btnWrapper: {
+    marginVertical: 10,
+    paddingHorizontal: 10,
+  },
+  btnSaveStyle: {
+    borderColor: '#2980b9',
+    backgroundColor: '#3498db',
+  },
+  btnSaveTextStyle: {
+    color: 'white',
   },
 });
 

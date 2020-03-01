@@ -1,5 +1,11 @@
 import {DynamicStyleSheet, DynamicValue} from 'react-native-dark-mode';
 
+import {
+  FONT_SIZE_BIG,
+  FONT_SIZE_SMALL,
+  BORDER_RADIUS_NORMAL,
+} from '../../constants';
+
 const dynamicStyleSheet = new DynamicStyleSheet({
   container: {
     flex: 1,
@@ -11,17 +17,23 @@ const dynamicStyleSheet = new DynamicStyleSheet({
   body: {
     backgroundColor: new DynamicValue('white', 'black'),
   },
+  header: {
+    marginTop: 32,
+    paddingBottom: 20,
+    marginHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
   defaultImageWrapper: {
     width: 160,
     height: 160,
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 32,
-    marginBottom: 24,
+    marginBottom: 20,
     borderWidth: 1,
     borderColor: '#999',
-    borderRadius: 4,
+    borderRadius: BORDER_RADIUS_NORMAL,
   },
   defaultImage: {
     width: 80,
@@ -29,34 +41,29 @@ const dynamicStyleSheet = new DynamicStyleSheet({
   },
   warning: {
     color: 'red',
-    marginLeft: 24,
-    marginRight: 24,
+    marginHorizontal: 10,
     textAlign: 'center',
   },
   canvas: {
     height: 200,
     width: 200,
-    marginTop: 32,
-    marginBottom: 24,
     alignSelf: 'center',
   },
   modalView: {
     backgroundColor: 'white',
     height: 160,
-    paddingLeft: 24,
-    paddingRight: 24,
-    paddingTop: 20,
-    paddingBottom: 20,
-    borderRadius: 5,
+    paddingHorizontal: 24,
+    paddingVertical: 20,
+    borderRadius: BORDER_RADIUS_NORMAL,
   },
   modalViewTitle: {
-    fontSize: 20,
+    fontSize: FONT_SIZE_BIG,
     marginBottom: 14,
     fontWeight: '700',
     textAlign: 'center',
   },
   modalViewDescription: {
-    fontSize: 16,
+    fontSize: FONT_SIZE_SMALL,
     marginBottom: 14,
     textAlign: 'center',
   },
@@ -66,7 +73,7 @@ const dynamicStyleSheet = new DynamicStyleSheet({
     marginTop: 20,
   },
   modalViewBtnText: {
-    fontSize: 20,
+    fontSize: FONT_SIZE_BIG,
     backgroundColor: 'yellow',
   },
   modeViewWrapper: {
