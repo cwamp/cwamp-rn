@@ -11,6 +11,7 @@ import {
 
 import {
   DarkModeProvider,
+  useDarkModeContext,
   DynamicValue,
   useDynamicStyleSheet,
   useDynamicValue,
@@ -41,20 +42,33 @@ const options = {
 const lightLogo = require('../../assets/images/add.png');
 const darkLogo = require('../../assets/images/add_dark.png');
 const logoUri = new DynamicValue(lightLogo, darkLogo);
+
+const lightModeLogo = require('../../assets/images/mode_dark.png');
+const darkModeLogo = require('../../assets/images/mode_light.png');
+const modeUri = new DynamicValue(lightModeLogo, darkModeLogo);
+
 const barStyle = new DynamicValue('dark-content', 'light-content');
 const barBGStyle = new DynamicValue('white', 'black');
 
 function App() {
+  const mode = useDarkModeContext();
   const styles = useDynamicStyleSheet(dynamicStyleSheet);
   const source = useDynamicValue(logoUri);
+  const modeSource = useDynamicValue(modeUri);
   const barSource = useDynamicValue(barStyle);
   const barBGSource = useDynamicValue(barBGStyle);
   const [avatarUrl, setAvatarUrl] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
+  const [currentMode, setCurrentMode] = useState(mode);
 
   const toggleModal = func => {
     setModalVisible(!isModalVisible);
     func && typeof func === 'function' && func();
+  };
+
+  const switchMode = () => {
+    setCurrentMode(currentMode === 'light' ? 'dark' : 'light');
+    console.log(currentMode);
   };
 
   const choosePic = () => {
@@ -110,7 +124,7 @@ function App() {
   );
 
   return (
-    <DarkModeProvider>
+    <DarkModeProvider mode={currentMode}>
       <GeneralStatusBarColor
         translucent
         backgroundColor={barBGSource}
@@ -141,6 +155,15 @@ function App() {
             </Modal>
           </View>
         </ScrollView>
+        <TouchableOpacity onPress={switchMode}>
+          <View style={styles.modeViewWrapper}>
+            <Image
+              resizeMode="contain"
+              source={modeSource}
+              style={styles.modeImage}
+            />
+          </View>
+        </TouchableOpacity>
       </SafeAreaView>
     </DarkModeProvider>
   );

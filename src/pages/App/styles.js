@@ -69,6 +69,15 @@ const dynamicStyleSheet = new DynamicStyleSheet({
     fontSize: 20,
     backgroundColor: 'yellow',
   },
+  modeViewWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  modeImage: {
+    width: 30,
+    height: 30,
+    marginRight: 20,
+  },
 });
 
 export default dynamicStyleSheet;
