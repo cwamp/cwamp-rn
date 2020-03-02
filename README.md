@@ -4,7 +4,6 @@
 
 ```npm
 yarn install
-
 # npm install
 ```
 
@@ -14,7 +13,6 @@ yarn install
 
 ```npm
 yarn ios
-
 # npm run ios
 ```
 
@@ -22,6 +20,15 @@ yarn ios
 
 ```npm
 yarn android
-
 # npm run android
 ```
+
+## Release
+
+### iOS
+
+[React Native打包iOS](https://blog.whezh.com/react-native-ios-bundle/)
+
+### Android
+
+[React Native打包Android](https://reactnative.dev/docs/signed-apk-android)
