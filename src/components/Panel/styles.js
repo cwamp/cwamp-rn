@@ -32,6 +32,9 @@ const dynamicStyleSheet = new DynamicStyleSheet({
   itemContent: {
     height: 25,
   },
+  itemContentTextInput: {
+    color: new DynamicValue('black', 'white'),
+  },
   btnWrapper: {
     marginVertical: 10,
     paddingHorizontal: 10,

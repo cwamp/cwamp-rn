@@ -9,12 +9,11 @@ import {
   Image,
 } from 'react-native';
 
+import {useDispatch, useSelector} from 'react-redux';
 import {
   DarkModeProvider,
   useDarkModeContext,
   DynamicValue,
-  useDynamicStyleSheet,
-  useDynamicValue,
 } from 'react-native-dark-mode';
 import ImagePicker from 'react-native-image-picker';
 import Modal from 'react-native-modal';
@@ -24,6 +23,9 @@ import GeneralStatusBarColor from '../../components/GeneralStatusBarColor';
 import Panel from '../../components/Panel';
 
 import dynamicStyleSheet from './styles';
+
+import * as actionTypes from '../../store/action-types';
+import actionCreators from '../../store/action-creators';
 
 import loadImage from '../../utils/image';
 
@@ -50,16 +52,22 @@ const modeUri = new DynamicValue(lightModeLogo, darkModeLogo);
 const barStyle = new DynamicValue('dark-content', 'light-content');
 const barBGStyle = new DynamicValue('white', 'black');
 
-function App() {
+const App = () => {
   const mode = useDarkModeContext();
-  const styles = useDynamicStyleSheet(dynamicStyleSheet);
-  const source = useDynamicValue(logoUri);
-  const modeSource = useDynamicValue(modeUri);
-  const barSource = useDynamicValue(barStyle);
-  const barBGSource = useDynamicValue(barBGStyle);
   const [avatarUrl, setAvatarUrl] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
-  const [currentMode, setCurrentMode] = useState(mode);
+  const imageUrl = useSelector(state => state.get('imageUrl'));
+  const image = useSelector(state => state.get('image'));
+  const fillText = useSelector(state => state.get('fillText'));
+  const showAppName = useSelector(state => state.get('showAppName'));
+  const currentMode = useSelector(state => state.get('currentMode') || mode);
+
+  const styles = dynamicStyleSheet[currentMode];
+  const source = logoUri[currentMode];
+  const modeSource = modeUri[currentMode];
+  const barSource = barStyle[currentMode];
+  const barBGSource = barBGStyle[currentMode];
+  const dispatch = useDispatch();
 
   const toggleModal = func => {
     setModalVisible(!isModalVisible);
@@ -67,8 +75,11 @@ function App() {
   };
 
   const switchMode = () => {
-    setCurrentMode(currentMode === 'light' ? 'dark' : 'light');
-    console.log(currentMode);
+    dispatch(
+      actionCreators[actionTypes.MODE_CHANGED](
+        currentMode === 'light' ? 'dark' : 'light',
+      ),
+    );
   };
 
   const choosePic = () => {
@@ -95,14 +106,15 @@ function App() {
     canvas.width = 200;
     canvas.height = 200;
     const ctx = canvas.getContext('2d');
-    loadImage(canvas, avatarUrl)
-      .then(image => {
-        ctx.drawImage(image, 0, 0, 200, 200);
-      })
-      .catch(console.error);
+    dispatch(actionCreators[actionTypes.CTX_CREATED](canvas, ctx));
+    // loadImage(canvas, avatarUrl)
+    //   .then(image => {
+    //     ctx.drawImage(image, 0, 0, 200, 200);
+    //   })
+    //   .catch(console.error);
   };
 
-  const image = !avatarUrl ? (
+  const headerContent = !avatarUrl ? (
     <>
       <TouchableWithoutFeedback onPress={choosePic}>
         <View style={styles.defaultImageWrapper}>
@@ -135,7 +147,7 @@ function App() {
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
           <View style={styles.body}>
-            <View style={styles.header}>{image}</View>
+            <View style={styles.header}>{headerContent}</View>
             <Panel />
           </View>
           <View>
@@ -167,6 +179,6 @@ function App() {
       </SafeAreaView>
     </DarkModeProvider>
   );
-}
+};
 
 export default App;

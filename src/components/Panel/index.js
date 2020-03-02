@@ -1,15 +1,18 @@
 import React from 'react';
 import {View, Text, TextInput, Switch} from 'react-native';
 
+import {useSelector} from 'react-redux';
+import {useDarkModeContext} from 'react-native-dark-mode';
 import Button from 'apsl-react-native-button';
 import Slider from '@react-native-community/slider';
 import RNPickerSelect from 'react-native-picker-select';
-import {useDynamicStyleSheet} from 'react-native-dark-mode';
 
 import dynamicStyleSheet from './styles';
 
 function Panel() {
-  const styles = useDynamicStyleSheet(dynamicStyleSheet);
+  const mode = useDarkModeContext();
+  const currentMode = useSelector(state => state.get('currentMode') || mode);
+  const styles = dynamicStyleSheet[currentMode];
 
   const toggleSwitch = value => {
     console.log('Switch', value);
@@ -46,6 +49,7 @@ function Panel() {
           <RNPickerSelect
             placeholder={{}}
             style={styles.itemContent}
+            textInputProps={styles.itemContentTextInput}
             value="gray"
             onValueChange={value => console.log(value)}
             items={[
@@ -67,6 +71,7 @@ function Panel() {
             minimumValue={0.1}
             maximumValue={1}
             step={0.1}
+            maximumTrackTintColor={currentMode === 'dark' ? '#777' : '#999'}
           />
         </View>
       </View>
