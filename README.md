@@ -18,6 +18,17 @@ yarn ios
 
 #### For Android
 
+```
+cd ~/Library/Android/sdk/tools/
+
+// 查看模拟设备列表
+./emulator -list-avds
+
+// 启动某个模拟设备
+./emulator @AVD_name
+./emulator @Pixel_API_23
+```
+
 ```npm
 yarn android
 # npm run android

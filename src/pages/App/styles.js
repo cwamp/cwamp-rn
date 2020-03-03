@@ -44,9 +44,10 @@ const dynamicStyleSheet = new DynamicStyleSheet({
     marginHorizontal: 10,
     textAlign: 'center',
   },
+  canvasWrapper: {
+    alignSelf: 'center',
+  },
   canvas: {
-    height: 200,
-    width: 200,
     alignSelf: 'center',
   },
   modalView: {

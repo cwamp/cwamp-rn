@@ -15,7 +15,7 @@ export default function(state) {
   ctx.drawImage(image, 0, 0, width, height);
 
   ctx.font = '20px';
-  ctx.fillStyle = `rgba(${colors.get(colorIndex).get('color')}, ${opacity})`;
+  ctx.fillStyle = `rgba(${colors.get(colorIndex).get('value')}, ${opacity})`;
 
   if (showAppName) {
     ctx.save();

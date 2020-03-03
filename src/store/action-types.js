@@ -1,7 +1,5 @@
 export const MODE_CHANGED = 'MODE_CHANGED';
 
-export const CTX_CREATED = 'CTX_CREATED';
-
 export const IMAGE_CHANGED = 'IMAGE_CHANGED';
 
 export const IMAGE_LOADED = 'IMAGE_LOADED';

@@ -1,21 +1,56 @@
 import React from 'react';
 import {View, Text, TextInput, Switch} from 'react-native';
 
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {useDarkModeContext} from 'react-native-dark-mode';
 import Button from 'apsl-react-native-button';
 import Slider from '@react-native-community/slider';
 import RNPickerSelect from 'react-native-picker-select';
+
+import {
+  changeTextarea,
+  changeColor,
+  changeOpacity,
+  showAppName,
+} from '../../store/action-creators';
 
 import dynamicStyleSheet from './styles';
 
 function Panel() {
   const mode = useDarkModeContext();
   const currentMode = useSelector(state => state.get('currentMode') || mode);
+  const opacity = useSelector(state => state.get('opacity'));
+  const colors = useSelector(state => state.get('colors')).toJS();
+  const colorIndex = useSelector(state => state.get('colorIndex'));
+  const showName = useSelector(state => state.get('showName'));
+
+  const currentColor = colors[colorIndex];
   const styles = dynamicStyleSheet[currentMode];
+  const dispatch = useDispatch();
+
+  const toggleTextarea = e => {
+    const {text} = e.nativeEvent;
+    // console.log('Textarea', text);
+    dispatch(changeTextarea(text));
+  };
+
+  const toggleColor = value => {
+    if (!value) {
+      return;
+    }
+    const colorIdx = colors.findIndex(color => color.value === value);
+    // console.log('Color', colorIdx);
+    dispatch(changeColor(colorIdx));
+  };
+
+  const toggleOpacity = value => {
+    // console.log('Opacity', value);
+    dispatch(changeOpacity(parseFloat(value)));
+  };
 
   const toggleSwitch = value => {
-    console.log('Switch', value);
+    // console.log('Switch', value);
+    dispatch(showAppName(value));
   };
 
   const previewImage = () => {
@@ -40,6 +75,7 @@ function Panel() {
             multiline
             numberOfLines={2}
             maxLength={40}
+            onBlur={toggleTextarea}
           />
         </View>
       </View>
@@ -47,19 +83,11 @@ function Panel() {
         <Text style={styles.itemTitle}>颜色</Text>
         <View style={styles.itemWrapper}>
           <RNPickerSelect
-            placeholder={{}}
             style={styles.itemContent}
             textInputProps={styles.itemContentTextInput}
-            value="gray"
-            onValueChange={value => console.log(value)}
-            items={[
-              {label: '白色', value: 'white'},
-              {label: '灰色', value: 'gray'},
-              {label: '黑色', value: 'black'},
-              {label: '红色', value: 'red'},
-              {label: '橙色', value: 'orange'},
-              {label: '蓝色', value: 'blue'},
-            ]}
+            value={currentColor.value}
+            onValueChange={toggleColor}
+            items={colors}
           />
         </View>
       </View>
@@ -71,7 +99,9 @@ function Panel() {
             minimumValue={0.1}
             maximumValue={1}
             step={0.1}
+            value={opacity}
             maximumTrackTintColor={currentMode === 'dark' ? '#777' : '#999'}
+            onValueChange={toggleOpacity}
           />
         </View>
       </View>
@@ -80,7 +110,7 @@ function Panel() {
         <View style={styles.itemWrapper}>
           <Switch
             style={styles.itemContent}
-            value={true}
+            value={showName}
             onValueChange={toggleSwitch}
           />
         </View>

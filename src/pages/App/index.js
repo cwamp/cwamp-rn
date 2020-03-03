@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -7,6 +7,7 @@ import {
   View,
   Text,
   Image,
+  Dimensions,
 } from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
@@ -21,13 +22,13 @@ import Canvas from 'react-native-canvas';
 
 import GeneralStatusBarColor from '../../components/GeneralStatusBarColor';
 import Panel from '../../components/Panel';
+import {
+  changeMode,
+  changeImage,
+  loadedImage,
+} from '../../store/action-creators';
 
 import dynamicStyleSheet from './styles';
-
-import * as actionTypes from '../../store/action-types';
-import actionCreators from '../../store/action-creators';
-
-import loadImage from '../../utils/image';
 
 //图片选择器参数设置
 const options = {
@@ -54,13 +55,30 @@ const barBGStyle = new DynamicValue('white', 'black');
 
 const App = () => {
   const mode = useDarkModeContext();
-  const [avatarUrl, setAvatarUrl] = useState('');
+  const [initialize, setInitialize] = useState(false);
+  const [canvasDimensions, setCanvasDimensions] = useState({});
   const [isModalVisible, setModalVisible] = useState(false);
-  const imageUrl = useSelector(state => state.get('imageUrl'));
-  const image = useSelector(state => state.get('image'));
-  const fillText = useSelector(state => state.get('fillText'));
-  const showAppName = useSelector(state => state.get('showAppName'));
   const currentMode = useSelector(state => state.get('currentMode') || mode);
+  const imageUrl = useSelector(state => state.get('imageUrl'));
+
+  const {
+    width: canvasWidth = 200,
+    height: canvasHeight = 200,
+  } = canvasDimensions;
+  const canvasScale = canvasHeight / canvasWidth;
+  const deviceWidth = Dimensions.get('window').width - 20;
+  const deviceHeight = Dimensions.get('window').height;
+  const windowScale = Math.floor(deviceHeight / deviceWidth);
+
+  let scrollViewWidth, scrollViewHeight;
+  if (canvasScale < windowScale) {
+    scrollViewWidth = deviceWidth;
+    scrollViewHeight = (deviceWidth * canvasHeight) / canvasWidth;
+  } else {
+    scrollViewHeight = deviceHeight;
+    scrollViewWidth = (deviceHeight * canvasWidth) / canvasHeight;
+  }
+  console.log(scrollViewWidth, scrollViewHeight, canvasWidth, canvasHeight);
 
   const styles = dynamicStyleSheet[currentMode];
   const source = logoUri[currentMode];
@@ -69,52 +87,58 @@ const App = () => {
   const barBGSource = barBGStyle[currentMode];
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (initialize) {
+      console.log('component updated.');
+    }
+    setInitialize(true);
+  }, [initialize]);
+
   const toggleModal = func => {
     setModalVisible(!isModalVisible);
     func && typeof func === 'function' && func();
   };
 
   const switchMode = () => {
-    dispatch(
-      actionCreators[actionTypes.MODE_CHANGED](
-        currentMode === 'light' ? 'dark' : 'light',
-      ),
-    );
+    dispatch(changeMode(currentMode === 'light' ? 'dark' : 'light'));
   };
 
   const choosePic = () => {
     ImagePicker.showImagePicker(options, response => {
       if (response.didCancel) {
-        console.log('用户取消了选择！');
+        console.log('User cancelled.');
       } else if (response.error) {
         console.error('ImagePicker发生错误：' + response.error);
-      } else if (response.customButton) {
-        console.warn('自定义按钮点击：' + response.customButton);
       } else {
         // let source = {uri: response.uri};
         // let source = {uri: 'data:image/jpeg;base64,' + response.data};
-        setAvatarUrl(`${response.uri}`);
+        const {uri, type, width, height} = response;
+        console.log(uri, type, width, height);
+        setCanvasDimensions({width, height});
+        dispatch(changeImage(uri, type));
       }
     });
   };
 
   const clearImage = () => {
-    setAvatarUrl('');
+    // todo
   };
 
   const handleCanvas = async canvas => {
-    canvas.width = 200;
-    canvas.height = 200;
-    const ctx = canvas.getContext('2d');
-    dispatch(actionCreators[actionTypes.CTX_CREATED](canvas, ctx));
-    // loadImage(canvas, avatarUrl)
-    //   .then(image => {
-    //     ctx.drawImage(image, 0, 0, 200, 200);
-    //   })
-    //   .catch(console.error);
+    if (canvas) {
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
+      const ctx = canvas.getContext('2d');
+      dispatch(loadedImage(canvas, ctx));
+      // loadImage(canvas, imageUrl)
+      //   .then(image => {
+      //     ctx.drawImage(image, 0, 0, canvasWidth, canvasHeight);
+      //   })
+      //   .catch(console.error);
+    }
   };
 
-  const headerContent = !avatarUrl ? (
+  const headerContent = !imageUrl ? (
     <>
       <TouchableWithoutFeedback onPress={choosePic}>
         <View style={styles.defaultImageWrapper}>
@@ -130,9 +154,26 @@ const App = () => {
       </Text>
     </>
   ) : (
-    <TouchableOpacity onPress={choosePic} onLongPress={toggleModal}>
-      <Canvas style={styles.canvas} ref={handleCanvas} />
-    </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={choosePic} onLongPress={toggleModal}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{height: scrollViewHeight}}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={{
+            width: scrollViewWidth,
+            ...styles.canvasWrapper,
+          }}>
+          <Canvas
+            style={{
+              ...styles.canvas,
+            }}
+            ref={handleCanvas}
+          />
+        </ScrollView>
+      </ScrollView>
+    </TouchableWithoutFeedback>
   );
 
   return (
