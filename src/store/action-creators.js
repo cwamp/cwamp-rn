@@ -1,5 +1,6 @@
 import * as actionTypes from './action-types';
 import loadImage from '../utils/image';
+import render from '../utils/canvas';
 
 export const changeMode = currentMode => {
   return {
@@ -22,87 +23,81 @@ export const loadedImage = (canvas, ctx) => {
       return;
     }
     loadImage(canvas, imageUrl)
-      .then(image => {
+      .then(async image => {
         dispatch({
           type: actionTypes.IMAGE_LOADED,
           canvas,
           ctx,
           image,
         });
-        dispatch({
-          type: actionTypes.RENDER,
-        });
+        await render(state);
       })
       .catch(err => console.error('err', err));
   };
 };
 
-export const changeImage = (imageUrl, filetype) => {
+export const changeImage = (imageUrl, fileType) => {
   if (!imageUrl) {
     return {
       type: actionTypes.IMAGE_CHANGED,
       imageUrl: '',
       filename: '',
-      filetype: '',
-      fileext: '',
+      fileType: '',
+      fileExt: '',
     };
   }
   const file = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
   const filename = file.substring(0, file.lastIndexOf('.'));
-  const fileext = file.substring(file.lastIndexOf('.') + 1);
+  const fileExt = file.substring(file.lastIndexOf('.') + 1);
   return {
     type: actionTypes.IMAGE_CHANGED,
     imageUrl,
     filename,
-    filetype,
-    fileext,
+    fileType,
+    fileExt,
   };
 };
 
 export const changeTextarea = text => {
-  return dispatch => {
+  return async (dispatch, getState) => {
+    const state = getState();
     dispatch({
       type: actionTypes.TEXTAREA_CHANGED,
       text,
     });
-    dispatch({
-      type: actionTypes.RENDER,
-    });
+    await render(state);
   };
 };
 
 export const changeColor = colorIndex => {
-  return dispatch => {
+  return async (dispatch, getState) => {
+    const state = getState();
     dispatch({
       type: actionTypes.COLOR_CHANGED,
       colorIndex,
     });
-    dispatch({
-      type: actionTypes.RENDER,
-    });
+    await render(state);
   };
 };
 
 export const changeOpacity = opacity => {
-  return dispatch => {
+  return async (dispatch, getState) => {
+    const state = getState();
     dispatch({
       type: actionTypes.OPACITY_CHANGED,
       opacity,
     });
-    dispatch({
-      type: actionTypes.RENDER,
-    });
+    await render(state);
   };
 };
 
 export const showAppName = showName => {
-  return dispatch => {
+  return async (dispatch, getState) => {
+    const state = getState();
     dispatch({
       type: actionTypes.SHOW_APP_NAME_CHANGED,
       showName,
     });
-    dispatch({
-      type: actionTypes.RENDER,
-    });
+    await render(state);
   };
 };

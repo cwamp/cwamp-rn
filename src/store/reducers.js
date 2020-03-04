@@ -1,5 +1,5 @@
 import {fromJS} from 'immutable';
-import render from '../utils/canvas';
+
 import {
   MODE_CHANGED,
   IMAGE_CHANGED,
@@ -8,7 +8,6 @@ import {
   COLOR_CHANGED,
   OPACITY_CHANGED,
   SHOW_APP_NAME_CHANGED,
-  RENDER,
 } from './action-types';
 
 const defaultState = fromJS({
@@ -18,8 +17,8 @@ const defaultState = fromJS({
   image: null,
   imageUrl: '',
   filename: '',
-  filetype: '',
-  fileext: '',
+  fileType: '',
+  fileExt: '',
   fillText: '',
   colors: [
     {label: '白色', value: '255, 255, 255', color: 'gray'},
@@ -42,8 +41,8 @@ export default (state = defaultState, action) => {
       return state
         .set('imageUrl', action.imageUrl)
         .set('filename', action.filename)
-        .set('filetype', action.filetype)
-        .set('fileext', action.fileext);
+        .set('fileType', action.fileType)
+        .set('fileExt', action.fileExt);
     case IMAGE_LOADED:
       return state
         .set('canvas', action.canvas)
@@ -57,9 +56,6 @@ export default (state = defaultState, action) => {
       return state.set('opacity', action.opacity);
     case SHOW_APP_NAME_CHANGED:
       return state.set('showName', action.showName);
-    case RENDER:
-      render(state);
-      return state;
     default:
       return state;
   }

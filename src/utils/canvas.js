@@ -1,4 +1,4 @@
-export default function(state) {
+export default async function(state) {
   const ctx = state.get('ctx');
   const image = state.get('image');
   if (!ctx || !image) {
@@ -25,7 +25,8 @@ export default function(state) {
   }
 
   const calHeight = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2));
-  let nums = Math.ceil(calHeight / ctx.measureText(fillText).width);
+  const measure = await ctx.measureText(fillText);
+  let nums = Math.ceil(calHeight / measure.width);
   let content = '';
   while (nums > 0) {
     if (content !== '') {
