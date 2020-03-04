@@ -9,7 +9,7 @@ export default async function(state) {
   const colors = state.get('colors');
   const colorIndex = state.get('colorIndex');
   const opacity = state.get('opacity');
-  const showAppName = state.get('showAppName');
+  const showName = state.get('showName');
 
   const {width, height} = image;
   ctx.drawImage(image, 0, 0, width, height);
@@ -17,10 +17,11 @@ export default async function(state) {
   ctx.font = '20px';
   ctx.fillStyle = `rgba(${colors.get(colorIndex).get('value')}, ${opacity})`;
 
-  if (showAppName) {
+  if (showName) {
     ctx.save();
     const title = '证件水印助手';
-    ctx.fillText(title, width - 70, height - 20);
+    const titleMeasure = await ctx.measureText(title);
+    ctx.fillText(title, width - titleMeasure.width - 10, height - 10);
     ctx.restore();
   }
 
@@ -28,7 +29,7 @@ export default async function(state) {
   const measure = await ctx.measureText(fillText);
   let nums = Math.ceil(calHeight / measure.width);
   let content = '';
-  while (nums > 0) {
+  while (nums >= 0) {
     if (content !== '') {
       content += '  ';
     }

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -55,7 +55,6 @@ const barBGStyle = new DynamicValue('white', 'black');
 
 const App = () => {
   const mode = useDarkModeContext();
-  const [initialize, setInitialize] = useState(false);
   const [canvasDimensions, setCanvasDimensions] = useState({});
   const [isModalVisible, setModalVisible] = useState(false);
   const currentMode = useSelector(state => state.get('currentMode') || mode);
@@ -78,7 +77,6 @@ const App = () => {
     scrollViewHeight = deviceHeight;
     scrollViewWidth = (deviceHeight * canvasWidth) / canvasHeight;
   }
-  console.log(scrollViewWidth, scrollViewHeight, canvasWidth, canvasHeight);
 
   const styles = dynamicStyleSheet[currentMode];
   const source = logoUri[currentMode];
@@ -86,13 +84,6 @@ const App = () => {
   const barSource = barStyle[currentMode];
   const barBGSource = barBGStyle[currentMode];
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (initialize) {
-      console.log('component updated.');
-    }
-    setInitialize(true);
-  }, [initialize]);
 
   const toggleModal = func => {
     setModalVisible(!isModalVisible);
@@ -113,7 +104,6 @@ const App = () => {
         // let source = {uri: response.uri};
         // let source = {uri: 'data:image/jpeg;base64,' + response.data};
         const {uri, type, width, height} = response;
-        console.log(uri, type, width, height);
         setCanvasDimensions({width, height});
         dispatch(changeImage(uri, type));
       }
@@ -130,11 +120,6 @@ const App = () => {
       canvas.height = canvasHeight;
       const ctx = canvas.getContext('2d');
       dispatch(loadedImage(canvas, ctx));
-      // loadImage(canvas, imageUrl)
-      //   .then(image => {
-      //     ctx.drawImage(image, 0, 0, canvasWidth, canvasHeight);
-      //   })
-      //   .catch(console.error);
     }
   };
 
