@@ -27,7 +27,6 @@ import {
   changeImage,
   loadedImage,
 } from '../../store/action-creators';
-
 import dynamicStyleSheet from './styles';
 
 //图片选择器参数设置

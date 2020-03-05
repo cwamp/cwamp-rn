@@ -1,6 +1,5 @@
 import * as actionTypes from './action-types';
 import loadImage from '../utils/image';
-import render from '../utils/canvas';
 
 export const changeMode = currentMode => {
   return {
@@ -9,7 +8,7 @@ export const changeMode = currentMode => {
   };
 };
 
-export const loadedImage = (canvas, ctx) => {
+export const loadedImage = (canvas, context) => {
   return (dispatch, getState) => {
     const state = getState();
     const imageUrl = state.get('imageUrl');
@@ -17,20 +16,22 @@ export const loadedImage = (canvas, ctx) => {
       dispatch({
         type: actionTypes.IMAGE_LOADED,
         canvas: null,
-        ctx: null,
+        context: null,
         image: null,
       });
       return;
     }
     loadImage(canvas, imageUrl)
-      .then(async image => {
+      .then(image => {
         dispatch({
           type: actionTypes.IMAGE_LOADED,
           canvas,
-          ctx,
+          context,
           image,
         });
-        await render(state);
+        dispatch({
+          type: actionTypes.FORCE_RENDER,
+        });
       })
       .catch(err => console.error('err', err));
   };
@@ -59,45 +60,49 @@ export const changeImage = (imageUrl, fileType) => {
 };
 
 export const changeTextarea = text => {
-  return async (dispatch, getState) => {
-    const state = getState();
+  return dispatch => {
     dispatch({
       type: actionTypes.TEXTAREA_CHANGED,
       text,
     });
-    await render(state);
+    dispatch({
+      type: actionTypes.FORCE_RENDER,
+    });
   };
 };
 
 export const changeColor = colorIndex => {
-  return async (dispatch, getState) => {
-    const state = getState();
+  return dispatch => {
     dispatch({
       type: actionTypes.COLOR_CHANGED,
       colorIndex,
     });
-    await render(state);
+    dispatch({
+      type: actionTypes.FORCE_RENDER,
+    });
   };
 };
 
 export const changeOpacity = opacity => {
-  return async (dispatch, getState) => {
-    const state = getState();
+  return dispatch => {
     dispatch({
       type: actionTypes.OPACITY_CHANGED,
       opacity,
     });
-    await render(state);
+    dispatch({
+      type: actionTypes.FORCE_RENDER,
+    });
   };
 };
 
 export const showAppName = showName => {
-  return async (dispatch, getState) => {
-    const state = getState();
+  return async dispatch => {
     dispatch({
       type: actionTypes.SHOW_APP_NAME_CHANGED,
       showName,
     });
-    await render(state);
+    dispatch({
+      type: actionTypes.FORCE_RENDER,
+    });
   };
 };

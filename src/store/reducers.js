@@ -1,5 +1,5 @@
 import {fromJS} from 'immutable';
-
+import render from '../utils/canvas';
 import {
   MODE_CHANGED,
   IMAGE_CHANGED,
@@ -8,12 +8,13 @@ import {
   COLOR_CHANGED,
   OPACITY_CHANGED,
   SHOW_APP_NAME_CHANGED,
+  FORCE_RENDER,
 } from './action-types';
 
 const defaultState = fromJS({
   currentMode: '',
   canvas: null,
-  ctx: null,
+  context: null,
   image: null,
   imageUrl: '',
   filename: '',
@@ -46,7 +47,7 @@ export default (state = defaultState, action) => {
     case IMAGE_LOADED:
       return state
         .set('canvas', action.canvas)
-        .set('ctx', action.ctx)
+        .set('context', action.context)
         .set('image', action.image);
     case TEXTAREA_CHANGED:
       return state.set('fillText', action.text);
@@ -56,6 +57,11 @@ export default (state = defaultState, action) => {
       return state.set('opacity', action.opacity);
     case SHOW_APP_NAME_CHANGED:
       return state.set('showName', action.showName);
+    case FORCE_RENDER:
+      setTimeout(async () => {
+        await render(state);
+      }, 300);
+      return state;
     default:
       return state;
   }

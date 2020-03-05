@@ -20,17 +20,16 @@ function Panel() {
   const mode = useDarkModeContext();
   const currentMode = useSelector(state => state.get('currentMode') || mode);
   const opacity = useSelector(state => state.get('opacity'));
-  const colors = useSelector(state => state.get('colors')).toJS();
+  const colors = useSelector(state => state.get('colors'));
   const colorIndex = useSelector(state => state.get('colorIndex'));
   const showName = useSelector(state => state.get('showName'));
 
-  const currentColor = colors[colorIndex];
+  const currentColor = colors.get(colorIndex);
   const styles = dynamicStyleSheet[currentMode];
   const dispatch = useDispatch();
 
   const toggleTextarea = e => {
     const {text} = e.nativeEvent;
-    // console.log('Textarea', text);
     dispatch(changeTextarea(text));
   };
 
@@ -38,13 +37,11 @@ function Panel() {
     if (!value) {
       return;
     }
-    const colorIdx = colors.findIndex(color => color.value === value);
-    // console.log('Color', colorIdx);
+    const colorIdx = colors.findIndex(color => color.get('value') === value);
     dispatch(changeColor(colorIdx));
   };
 
   const toggleOpacity = value => {
-    // console.log('Opacity', value);
     dispatch(changeOpacity(parseFloat(value)));
   };
 
@@ -83,11 +80,12 @@ function Panel() {
         <Text style={styles.itemTitle}>颜色</Text>
         <View style={styles.itemWrapper}>
           <RNPickerSelect
+            placeholder={{}}
             style={styles.itemContent}
             textInputProps={styles.itemContentTextInput}
-            value={currentColor.value}
+            value={currentColor.get('value')}
             onValueChange={toggleColor}
-            items={colors}
+            items={colors.toJS()}
           />
         </View>
       </View>
