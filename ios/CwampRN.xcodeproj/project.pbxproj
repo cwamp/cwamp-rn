@@ -17,6 +17,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* CwampRNTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CwampRNTests.m */; };
+		2E850A9524109A030038F9E1 /* bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2E850A9424109A030038F9E1 /* bundle */; };
 		724601FC0EF83E70FC76E6D8 /* libPods-CwampRNTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42013A9A5D33085ACE15974C /* libPods-CwampRNTests.a */; };
 		83EED2F22672DB4B2A7CACAC /* libPods-CwampRN-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B294925C39CE63E7CB263359 /* libPods-CwampRN-tvOSTests.a */; };
 		E05F503307B848A2D8E21A3E /* libPods-CwampRN.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 283F81DBDBD4E56A4245C0B0 /* libPods-CwampRN.a */; };
@@ -57,6 +58,7 @@
 		283F81DBDBD4E56A4245C0B0 /* libPods-CwampRN.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CwampRN.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E47B1E0B4A5D006451C7 /* CwampRN-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CwampRN-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* CwampRN-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CwampRN-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E850A9424109A030038F9E1 /* bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundle; sourceTree = "<group>"; };
 		3F95F0A8C781492D326977B8 /* libPods-CwampRN-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CwampRN-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42013A9A5D33085ACE15974C /* libPods-CwampRNTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CwampRNTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		51E4FD2157F96F3015312578 /* Pods-CwampRN.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CwampRN.debug.xcconfig"; path = "Target Support Files/Pods-CwampRN/Pods-CwampRN.debug.xcconfig"; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 		13B07FAE1A68108700A75B9A /* CwampRN */ = {
 			isa = PBXGroup;
 			children = (
+				2E850A9424109A030038F9E1 /* bundle */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -337,6 +340,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				2E850A9524109A030038F9E1 /* bundle in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
