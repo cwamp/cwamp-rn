@@ -66,7 +66,6 @@ function Panel() {
           <TextInput
             style={styles.textInput}
             autoCorrect={false}
-            autoFocus={true}
             placeholder="本证件仅供XX业务使用, 其他用途无效"
             placeholderTextColor="#999"
             multiline

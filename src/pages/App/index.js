@@ -103,6 +103,7 @@ const App = () => {
         // let source = {uri: response.uri};
         // let source = {uri: 'data:image/jpeg;base64,' + response.data};
         const {uri, type, width, height} = response;
+        // console.log(`width: ${width}, height: ${height}`);
         setCanvasDimensions({width, height});
         dispatch(changeImage(uri, type));
       }
@@ -192,15 +193,13 @@ const App = () => {
             </Modal>
           </View>
         </ScrollView>
-        <View style={styles.modeViewWrapper}>
-          <TouchableOpacity onPress={switchMode}>
-            <Image
-              resizeMode="contain"
-              source={modeSource}
-              style={styles.modeImage}
-            />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity onPress={switchMode}>
+          <Image
+            resizeMode="contain"
+            source={modeSource}
+            style={styles.modeImage}
+          />
+        </TouchableOpacity>
       </SafeAreaView>
     </DarkModeProvider>
   );

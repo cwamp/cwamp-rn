@@ -25,8 +25,8 @@ const dynamicStyleSheet = new DynamicStyleSheet({
     borderBottomColor: new DynamicValue('#f0f0f0', '#555'),
   },
   defaultImageWrapper: {
-    width: 160,
-    height: 160,
+    width: 120,
+    height: 120,
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
@@ -77,14 +77,12 @@ const dynamicStyleSheet = new DynamicStyleSheet({
     fontSize: FONT_SIZE_BIG,
     backgroundColor: 'yellow',
   },
-  modeViewWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
   modeImage: {
+    position: 'absolute',
     width: 30,
     height: 30,
-    marginRight: 20,
+    right: 20,
+    bottom: 10,
   },
 });
 
