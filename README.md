@@ -11,6 +11,14 @@ yarn install
 
 #### For iOS
 
+```
+# 列出安装的所有可用的设备
+xcrun instruments -s
+
+# 开启指定模拟器（上面的列表就是可用模拟器名称）
+xcrun instruments -w "iPad Pro (10.5-inch) (12.2)"
+```
+
 ```npm
 yarn ios
 # npm run ios
